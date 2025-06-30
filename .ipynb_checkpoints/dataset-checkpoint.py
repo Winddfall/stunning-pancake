@@ -100,6 +100,6 @@ def dataloader(batch_size):
         num_workers=2,
         pin_memory=True,
     )
-    test_dataset = NoisyMNISTDatasetBinary("./dataset", train=False)
+    test_dataset = NoisyMNISTDatasetBinary("./dataset", train=False, transform=val_test_transform)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
     return train_loader, val_loader, test_loader

@@ -34,14 +34,14 @@ def train(model, device, num_epochs, learning_rate, train_loader, val_loader):
             train_loss += loss.item() # 累加训练损失
         scheduler.step()
 
-        # 测试
+        # 验证
         model.eval()
         val_loss, val_psnr, val_ssim = 0.0, 0.0, 0.0
         with torch.no_grad():
             for noise, origin in tqdm(
                 val_loader, desc=f"Epoch {epoch+1}/{num_epochs} [Val]  "
             ):
-                noise = noise.to(device)
+                noise, origin = noise.to(device), origin.to(device)
                 outputs = model(noise)
                 # val_loss += criterion(outputs, origin).item()
                 val_psnr += batch_psnr(outputs.detach(), origin)

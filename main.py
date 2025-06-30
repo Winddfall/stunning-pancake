@@ -9,7 +9,7 @@ from visual import visual_dataset, visual_results
 
 batch_size = 128
 learning_rate = 0.001
-num_epochs = 100
+num_epochs = 30
 cuda = 1
 device = torch.device(f"cuda:{cuda}" if torch.cuda.is_available() else "cpu")
 
