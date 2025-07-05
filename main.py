@@ -4,21 +4,22 @@ import pandas as pd
 from train import train
 from inference import inference
 from dataset import dataloader
-from model import UNet
+from model import create_ori_unet
 from visual import visual_dataset, visual_results
 
-batch_size = 128
+batch_size = 256
 learning_rate = 0.001
-num_epochs = 30
-cuda = 1
+num_epochs = 50
+cuda = 0
 device = torch.device(f"cuda:{cuda}" if torch.cuda.is_available() else "cpu")
 
 if __name__ == "__main__":
+    print("...")
     train_loader, val_loader, test_loader = dataloader(batch_size)
     print("Saving dataset examples visualization to 'dataset_examples.png'...")
     visual_dataset(train_loader)
     print("Starting model training...")
-    model = UNet().to(device)
+    model = create_ori_unet(device)
     # 训练模型
     train(model, device, num_epochs, learning_rate, train_loader, val_loader)
     # 验证模型
