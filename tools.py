@@ -35,6 +35,6 @@ def tensor_to_base64(tensor):
 
 
 def calculate_score(psnr, ssim_val):
-    psnr_score = (psnr - 15) / (30 - 15)
+    psnr_score = (min(psnr, 30) - 15) / (30 - 15)
     ssim_score = (ssim_val - 0.6) / (1.0 - 0.6)
-    return 0.4 * psnr_score + 0.6 * ssim_score
+    return 4 * psnr_score + 6 * ssim_score

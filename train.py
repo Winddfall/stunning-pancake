@@ -2,7 +2,7 @@ import os
 import torch
 from tqdm import tqdm
 import torch.optim as optim
-from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts
+from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts, StepLR
 from model import CombinedLoss
 from tools import batch_psnr, batch_ssim, calculate_score
 
@@ -12,7 +12,7 @@ def train(model, device, num_epochs, learning_rate, train_loader, val_loader):
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
     # scheduler = CosineAnnealingWarmRestarts(optimizer, T_0=10, T_mult=2, eta_min=1e-6)
     # 修改scheduler
-    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
+    scheduler = StepLR(optimizer, step_size=20, gamma=0.5)
     best_score = -1.0
 
     print("Starting model training with Attention ResU-Net...")
@@ -55,7 +55,7 @@ def train(model, device, num_epochs, learning_rate, train_loader, val_loader):
         current_lr = optimizer.param_groups[0]["lr"]
         print(
             f"Epoch [{epoch+1}/{num_epochs}] | Train Loss: {avg_train_loss:.4f} | "
-            f"Val PSNR: {avg_val_psnr:.2f} | Val SSIM: {avg_val_ssim:.4f} | "
+            f"Val PSNR: {min(avg_val_psnr, 30):.2f} | Val SSIM: {avg_val_ssim:.4f} | "
             f"Val Score: {val_score:.4f} | LR: {current_lr:.6f}"
         )
         # 存储最好的模型参数
